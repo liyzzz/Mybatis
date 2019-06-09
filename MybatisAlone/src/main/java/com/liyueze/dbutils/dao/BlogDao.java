@@ -10,11 +10,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * DbBUtils
- * 使用queryRunner进行操作
- * 比有原生的JDBC操作
- */
+
 public class BlogDao {
 
     private static QueryRunner queryRunner;

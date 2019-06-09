@@ -21,7 +21,6 @@ public class HikariUtil {
      */
     public static void init() {
         HikariConfig config = new HikariConfig(PROPERTY_PATH);
-        config.setDriverClassName("com.mysql.cj.jdbc.MysqlDataSource");
         dataSource = new HikariDataSource(config);
         queryRunner = new QueryRunner(dataSource);
     }
