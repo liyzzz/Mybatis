@@ -14,14 +14,25 @@ import java.io.InputStream;
 
 
 public class MyBatisTest {
-
     /**
      * 使用MyBatis API方式
-     * 有四个重要的类
-     * SqlSessionFactoryBuilder：读取解析配置文件
-     * SqlSessionFactory 生成sqlSession
-     * SqlSession 相当于jdbc里的一次连接
-     * Mapper sql配置文件
+     * @throws IOException
+     */
+    @Test
+    public void testStatement() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            Blog blog = (Blog) session.selectOne("com.liyueze.mybatis.mapper.BlogMapper.selectBlogById", 1);
+            System.out.println(blog);
+        } finally {
+            session.close();
+        }
+    }
+    /**
+     * 通过 SqlSession.getMapper(XXXMapper.class)  接口方式
      * @throws IOException
      */
     @Test
@@ -39,6 +50,8 @@ public class MyBatisTest {
             session.close();
         }
     }
+
+
 
 
 

@@ -46,7 +46,8 @@
     </environments>
 
     <mappers>
-        <package name="com.liyueze.mybatis.mapper"/>
+        <mapper resource="mapper/BlogMapper.xml"/>
+        <mapper resource="mapper/BlogMapperExt.xml"/>
     </mappers>
 
 </configuration>
