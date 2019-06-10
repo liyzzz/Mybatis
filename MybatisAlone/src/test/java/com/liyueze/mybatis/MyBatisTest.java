@@ -15,7 +15,7 @@ import java.io.InputStream;
 
 public class MyBatisTest {
     /**
-     * 使用MyBatis API方式
+     * 使用iBatis方式
      * @throws IOException
      */
     @Test
@@ -46,6 +46,30 @@ public class MyBatisTest {
             BlogMapper mapper = session.getMapper(BlogMapper.class);
             Blog blog = mapper.selectBlogById(1);
             System.out.println(blog);
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * 测试插入
+     * @throws IOException
+     */
+    @Test
+    public void testInsert() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            BlogMapper mapper = session.getMapper(BlogMapper.class);
+            Blog blog = new Blog();
+            blog.setBid(1688);
+            blog.setName("测试插入");
+            blog.setAuthorId(1111);
+            System.out.println(mapper.insertBlog(blog));
+            session.commit();
         } finally {
             session.close();
         }

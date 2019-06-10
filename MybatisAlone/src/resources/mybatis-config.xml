@@ -27,7 +27,10 @@
         <typeAlias alias="blog" type="com.liyueze.mybatis.entry.Blog" />
     </typeAliases>
 
-
+    <!--注册自定义TypeHandler-->
+     <typeHandlers>
+            <typeHandler handler="com.liyueze.mybatis.typeHandler.MyTypeHandler"></typeHandler>
+     </typeHandlers>
 
  
 

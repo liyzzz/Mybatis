@@ -18,7 +18,7 @@
 
     <resultMap id="BaseResultMap" type="blog">
         <id column="bid" property="bid" jdbcType="INTEGER"/>
-
+        <result column="name" property="name" jdbcType="VARCHAR" typeHandler="com.liyueze.mybatis.typeHandler.MyTypeHandler"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="author_id" property="authorId" jdbcType="INTEGER"/>
     </resultMap>
