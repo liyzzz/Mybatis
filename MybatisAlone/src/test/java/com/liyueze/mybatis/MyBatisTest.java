@@ -65,8 +65,8 @@ public class MyBatisTest {
         try {
             BlogMapper mapper = session.getMapper(BlogMapper.class);
             Blog blog = new Blog();
-            blog.setBid(1688);
-            blog.setName("测试插入");
+            blog.setBid(16);
+            blog.setName(new String("1111"));
             blog.setAuthorId(1111);
             System.out.println(mapper.insertBlog(blog));
             session.commit();

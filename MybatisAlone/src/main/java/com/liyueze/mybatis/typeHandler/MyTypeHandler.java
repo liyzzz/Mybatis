@@ -11,7 +11,11 @@ import java.sql.SQLException;
 /**
  * java类型为String的类型转换
  * 需要在mybatis-config.xml中注册该TypeHandler
- * 注意:在字段上添加typeHandler属性才会生效(在BlogMapper.xml中BaseResultMap配置)
+ * 且
+ * 在字段上添加typeHandler属性才会生效
+ * 例:在BlogMapper.xml中
+ * id为BaseResultMap的resultMap(调用getNullableResult方法)
+ * 和id为insertBlog的insert语句（调用setNonNullParameter方法）
  */
 public class MyTypeHandler extends BaseTypeHandler<String> {
     /**

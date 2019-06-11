@@ -18,8 +18,7 @@
 
     <resultMap id="BaseResultMap" type="blog">
         <id column="bid" property="bid" jdbcType="INTEGER"/>
-        <result column="name" property="name" jdbcType="VARCHAR" typeHandler="com.liyueze.mybatis.typeHandler.MyTypeHandler"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"  typeHandler="com.liyueze.mybatis.typeHandler.MyTypeHandler"/>
         <result column="author_id" property="authorId" jdbcType="INTEGER"/>
     </resultMap>
 
@@ -130,7 +129,7 @@
 
     <insert id="insertBlog" parameterType="blog">
     insert into blog (bid, name, author_id)
-    values (#{bid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER})
+    values (#{bid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR,typeHandler=com.liyueze.mybatis.typeHandler.MyTypeHandler}, #{authorId,jdbcType=INTEGER})
 </insert>
 
 

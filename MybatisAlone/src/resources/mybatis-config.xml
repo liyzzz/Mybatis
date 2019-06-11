@@ -32,8 +32,10 @@
             <typeHandler handler="com.liyueze.mybatis.typeHandler.MyTypeHandler"></typeHandler>
      </typeHandlers>
 
- 
-
+    <!-- 对象工厂 -->
+    <objectFactory type="com.liyueze.mybatis.objectFacoty.MyObjectFacoty">
+        <property name="ObjectFacoty" value="com.liyueze.mybatis.entry.Blog"/>
+    </objectFactory>
 
 
     <environments default="development">

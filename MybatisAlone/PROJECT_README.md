@@ -66,12 +66,24 @@ configuration 是整个配置文件的根标签，对应着 MyBatis 里面配置
 ```
 TypeAlias是给类型起别名
 ```
-* typeHandlers
+* objectFactory(重点)
+```
+当我们把数据库返回的结果集转换为实体类的时候，需要创建对象的实例
+ObjectFactory，专门用来创建对象的实例
+ObjectFactory先工作创建对象，然后再是TypeHandler工作
+自定义的objectFactory示例：
+见objectFactory包下MyObjectFactory(有具体的配置说明)
+测试见testSelect方法和testInsert
+```
+* typeHandlers(重点)
 ```
 typeHandlers用来将java对象和数据库类型相互转换
 Mybatis默认的typeHandles都注册在TypeHandlerRegistry中
-自定义的typeHandle见
+自定义的typeHandler示例：
+见typeHandler包下MyTypeHandler(有具体的配置说明)
+测试见testSelect方法和testInsert
 ```
+
 
 
  
