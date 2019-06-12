@@ -141,6 +141,13 @@
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
                 <if test="criteria.valid">
+                   /*
+                    trim有四个属性：
+                    prefixoverride:去掉第一个字符串。可以填入"AND |OR"，这样就是去掉第一个and或者是or
+                    suffixoverride：去掉最后一个字符串。同上
+                    prefix:前缀，在前面加上
+                    suffix：后缀，在后面加上
+                    */
                     <trim prefix="(" prefixOverrides="and" suffix=")">
                         <foreach collection="criteria.criteria" item="criterion">
                             <choose>

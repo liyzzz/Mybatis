@@ -21,6 +21,7 @@
                 <setting name="localCacheScope" value="STATEMENT"/>
         -->
         <setting name="localCacheScope" value="SESSION"/>
+
     </settings>
 <!--    typeAliases标签用来起别名-->
     <typeAliases>
@@ -37,15 +38,32 @@
         <property name="ObjectFacoty" value="com.liyueze.mybatis.entry.Blog"/>
     </objectFactory>
 
-
+    <!--可以在new SqlSessionFactoryBuilder().build(reader, environment)这个提供的构造方法中传入需要的environment-->
     <environments default="development">
+        <!--假设为开发环境-->
         <environment id="development">
-            <transactionManager type="JDBC"/><!-- 单独使用时配置成MANAGED没有事务 -->
+            <!--
+            transactionManager只有两个值，
+            一个是JDBC:使用JDBC的事物管理,使用Connection对象的commit()、rollback()、close()来管理事务。
+            一个是MANAGED:没有事务,交给容器来管理，例如JBOSS，Weblogic
+            如 果 是 Spring + MyBatis ，则没有必要配置 ，因为会直接在applicationContext.xml里面配置数据源，覆盖MyBatis的配置
+            -->
+            <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="${jdbc.driver}"/>
                 <property name="url" value="${jdbc.url}"/>
                 <property name="username" value="${jdbc.username}"/>
                 <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+        <!--假设为测试环境-->
+        <environment id="test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.test.driver}"/>
+                <property name="url" value="${jdbc.test.url}"/>
+                <property name="username" value="${jdbc.test.username}"/>
+                <property name="password" value="${jdbc.test.password}"/>
             </dataSource>
         </environment>
     </environments>

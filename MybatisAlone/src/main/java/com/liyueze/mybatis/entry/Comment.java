@@ -1,7 +1,9 @@
 package com.liyueze.mybatis.entry;
 
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
     Integer commentId; // 评论ID
     Integer bid; // 所属文章ID
     String content; // 内容

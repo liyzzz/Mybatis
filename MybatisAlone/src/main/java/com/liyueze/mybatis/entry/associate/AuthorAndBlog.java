@@ -1,9 +1,10 @@
 package com.liyueze.mybatis.entry.associate;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class AuthorAndBlog {
+public class AuthorAndBlog implements Serializable {
     Integer author_id; // 作者ID
     String author_name; // 作者名称
     List<BlogAndComment> blog; // 文章和评论列表

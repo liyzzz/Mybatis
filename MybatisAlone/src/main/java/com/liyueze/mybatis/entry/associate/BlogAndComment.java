@@ -2,10 +2,11 @@ package com.liyueze.mybatis.entry.associate;
 
 import com.liyueze.mybatis.entry.Comment;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class BlogAndComment {
+public class BlogAndComment implements Serializable {
     Integer bid; // 文章ID
     String name; // 文章标题
     Integer authorId; // 文章作者ID
