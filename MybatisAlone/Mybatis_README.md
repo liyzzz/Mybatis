@@ -259,6 +259,14 @@ environments标签用来管理数据库的环境，比如我们可以有开发�
     还会对查询返回的entry实例动手脚(mybatis中DefaultResultSetHandler.createResultObject()方法)
     AuthorAndBlog实例被代理了,getAuthor方法是被代理的方法
     ```
+* 一对多的关联查询
+```
+示例见MyBatisTest下testSelectBlogWithComment方法
+```
+* 多对多的关联查询
+```
+示例见MyBatisTest下testSelectAuthorWithBlog方法
+```
 ### 翻页
 * 逻辑翻页: 
 ```
