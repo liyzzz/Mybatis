@@ -1,12 +1,16 @@
 package com.liyueze.mybatis;
 
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.liyueze.mybatis.entry.Blog;
 import com.liyueze.mybatis.entry.associate.AuthorAndBlog;
 import com.liyueze.mybatis.entry.associate.BlogAndAuthor;
 import com.liyueze.mybatis.entry.associate.BlogAndComment;
 import com.liyueze.mybatis.mapper.BlogMapper;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -179,6 +183,65 @@ public class MyBatisTest {
         }
     }
 
+    /**
+     * 逻辑分页
+     * @throws IOException
+     */
+    @Test
+    public void testSelectByRowBounds() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            BlogMapper mapper = session.getMapper(BlogMapper.class);
+            int start = 0; // offset
+            int pageSize = 5; // limit
+            RowBounds rb = new RowBounds(start, pageSize);
+            List<Blog> list = mapper.selectBlogList(rb); // 使用逻辑分页
+            for(Blog b :list){
+                System.out.println(b);
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * 物理分页
+     * 使用pageHelp插件
+     * 使用方法：
+     * 首先需要maven引入jar包
+     * 在mybatis-config.xml配置plugin
+     * 如下例使用
+     * 详细示例见https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md官方文档
+     * @throws IOException
+     */
+    @Test
+    public void testSelectByPageHelp() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            BlogMapper mapper = session.getMapper(BlogMapper.class);
+            PageHelper.offsetPage(1, 5);
+            List<Blog> blogs = mapper.selectBlogList();
+            //用PageInfo对结果进行包装
+            PageInfo page = new PageInfo(blogs);
+            //测试PageInfo全部属性
+            System.out.println(blogs);
+            //PageInfo包含了非常全面的分页属性
+            //获取当前页有记录
+            System.out.println(page.getPageNum());
+            //获取最后一页页码
+            System.out.println(page.getLastPage());
+        } finally {
+            session.close();
+        }
+    }
 
 
 }

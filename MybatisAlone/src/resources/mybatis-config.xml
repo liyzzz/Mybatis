@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
+    <!--
+       configuration中标签必须按照
+       properties,settings,typeAliases,typeHandlers,objectFactory,
+       objectWrapperFactory,reflectorFactory,plugins,environments,databaseIdProvider,mappers
+       这个顺序排序
+    -->
     <properties resource="db.properties"></properties>
     <settings>
         <!-- 打印查询语句 -->
@@ -21,8 +26,9 @@
                 <setting name="localCacheScope" value="STATEMENT"/>
         -->
         <setting name="localCacheScope" value="SESSION"/>
-
     </settings>
+
+
 <!--    typeAliases标签用来起别名-->
     <typeAliases>
         <typeAlias alias="blog" type="com.liyueze.mybatis.entry.Blog" />
@@ -37,6 +43,21 @@
     <objectFactory type="com.liyueze.mybatis.objectFacoty.MyObjectFacoty">
         <property name="ObjectFacoty" value="com.liyueze.mybatis.entry.Blog"/>
     </objectFactory>
+
+    <!--插件-->
+    <plugins>
+        <!-- 分页pageHelp插件-->
+        <!--配置说明见https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md-->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <property name="offsetAsPageNum" value="false"/>
+            <property name="rowBoundsWithCount" value="false"/>
+            <property name="pageSizeZero" value="true"/>
+            <property name="reasonable" value="false"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+    </plugins>
 
     <!--可以在new SqlSessionFactoryBuilder().build(reader, environment)这个提供的构造方法中传入需要的environment-->
     <environments default="development">

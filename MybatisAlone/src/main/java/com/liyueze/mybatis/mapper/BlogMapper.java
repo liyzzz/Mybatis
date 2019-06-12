@@ -33,6 +33,8 @@ public interface BlogMapper {
      */
     public List<Blog> selectBlogList(RowBounds rowBounds);
 
+    public List<Blog> selectBlogList();
+
     /**
      * 更新博客
      * @param blog

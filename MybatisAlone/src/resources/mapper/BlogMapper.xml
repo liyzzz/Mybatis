@@ -77,6 +77,7 @@
         select bid, name, author_id authorId from blog
     </select>
 
+
     <!-- 根据文章查询作者，一对一，嵌套结果，无N+1问题 -->
     <select id="selectBlogWithAuthorResult" resultMap="BlogWithAuthorResultMap" >
         select b.bid, b.name, b.author_id, a.author_id , a.author_name

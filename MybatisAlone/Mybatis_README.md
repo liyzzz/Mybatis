@@ -259,7 +259,58 @@ environments标签用来管理数据库的环境，比如我们可以有开发�
     还会对查询返回的entry实例动手脚(mybatis中DefaultResultSetHandler.createResultObject()方法)
     AuthorAndBlog实例被代理了,getAuthor方法是被代理的方法
     ```
- 
-
+### 翻页
+* 逻辑翻页: 
+```
+逻辑翻页的原理是把所有数据查出来，在内存中删选数据
+Mybatis 采用了这个方式，可以在Mapper接口的方法上加上这个参数，不需要修改xml里面的SQL语句
+示例见MyBatisTest下testSelectBlogWithAuthorQuery方法
+它的底层其实是对 ResultSet 的处理。它会舍弃掉前面 offset 条数据，然后再取剩下的数据的 limit条
+``` 
+* 物理翻页:
+```
+ 物理翻页是真正的翻页，比如MySQL使用limit语句，Oracle使用rownum语句，SQLServer使用 top 语句。
+ 如果在mapper文件中自己写分页的SQL，那么就需要自己在java代码中计算启止序号，
+ 且每个需要翻页的statment中都要写limit,这样就造成了代码沉余
+ 所以在项目中，基本都会使用分页插件，例如PageHelper等
+ PageHelper的使用示例见:MyBatisTest下testSelectByPageHelp
+``` 
+### 通用 Mapper
+```
+ 1.出现原因：
+ 当我们的表字段发生变化的时候，我们需要修改实体类和 Mapper 文件定义
+ 的字段和方法。如果是增量维护，那么一个个文件去修改。如果是全量替换，我们还要
+ 去对比用 MBG 生成的文件。字段变动一次就要修改一次，维护起来非常麻烦  
+ 2.解决方案：
+ 因为MyBatis 的 Mapper是支持继承（示例见BlogMapperExt）
+ 所以我们可以把我们的Mapper.xml 和 Mapper接都分成两个文件。一个是 MBG 生成的，这部分是固定不变的，
+ 然后创建 DAO 类继承生成的接口，变化的部分就在 DAO 里面维护
+ 3.通用 Mapper原理：
+ 编写一个支持泛型的通用接口，比如叫 BaseMapper<T>，把实体类作为参数传入。
+ 这个接口里面定义了大量的增删改查的基础方法，这些方法都是支持泛型的。
+ 自定义的 Mapper 接口继承该通用接口 。
+ 例如 BlogMapper extends BaseMapper<Blog>，
+ 自动获得对实体类的操作方法。遇到没有的方法，我们依然可以在我们自己的 Mapper 里面编写
+ 4.使用途径：
+    4.1 主要解决单表的增删改查问题，并不适用于多表关联查询的场景
+    4.2 每个 Mapper 接口中大量的重复方法的定义
+    4.3 屏蔽数据库的差异
+    4.4 提供批量操作的方法
+    4.5 实现分页
+    注：具体使用方法见官方文档：https://github.com/abel533/Mapper
+```
+### MyBatis-Plus
+```
+ MyBatis-Plus与通用 Mapper类似
+ 核心功能：
+    1.通用 CRUD：定义好 Mapper 接口后，只需要继承 BaseMapper<T> 接口即
+    可获得通用的增删改查功能，无需编写任何接口方法与配置文件。
+    2.条件构造器：通过 EntityWrapper<T>（实体包装类），可以用于拼接 SQL 语
+    句，并且支持排序、分组查询等复杂的 SQL。
+    3.代码生成器：支持一系列的策略配置与全局配置，比 MyBatis 的代码生成更好
+    用
+    4.实现分页
+    注：具体使用方法见官方文档：https://mybatis.plus/guide/
+```
  
      
