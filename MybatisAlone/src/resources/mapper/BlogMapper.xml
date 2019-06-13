@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liyueze.mybatis.mapper.BlogMapper">
-    <!-- 声明这个namespace使用二级缓存 -->
+    <!-- 声明这个namespace使用默认的二级缓存 -->
     <cache/>
+    <!--
+     cache 标签属性
+     type：需要实现 Cache 接口，默认是 PerpetualCache ,是缓存实现类
+     size： 最多缓存对象个数 默认 1024
+     eviction: 回收策略,缓存淘汰算法
+               可选值：
+               LRU – 最近最少使用的：移除最长时间不被使用的对象（默认）。
+               FIFO – 先进先出：按对象进入缓存的顺序来移除它们
+               SOFT – 软引用：移除基于垃圾回收器状态和软引用规则的对象
+               WEAK – 弱引用：更积极地移除基于垃圾收集器状态和弱引用规则的对象
+     flushInterval：定时自动刷新时间，单位 ms，未配置时只有调用时刷新
+     readOnly：是否只读
+               可选值：
+               true：只读缓存；会给所有调用者返回缓存对象的相同实例。因此这些对象 不能被修改。这提供了很重要的性能优势。
+               false：读写缓存；会返回缓存对象的拷贝（通过序列化），不会共享。这 会慢一些，但是安全，因此默认是 false。 改为 false 可读写时，对象必须支持序列化。
+      blocking：是否使用可重入锁实现 缓存的并发控制。true，会使用 BlockingCache 对 Cache 进行装饰 默认 false
 
+     -->
     <!-- 使用Redis作为二级缓存 -->
 <!--
     <cache type="org.mybatis.caches.redis.RedisCache"
            eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
 -->
-
-<!--        <cache type="org.apache.ibatis.cache.impl.PerpetualCache"
+    <!-- 使用mybatis默认的cache -->
+<!--        <cache type="org.apache.ibatis.cacheTest.impl.PerpetualCache"
                size="1024"
                eviction="LRU"
                flushInterval="120000"
@@ -64,7 +81,7 @@
         </collection>
     </resultMap>
 
-    <select id="selectBlogById" resultMap="BaseResultMap" statementType="PREPARED" useCache="false">
+    <select id="selectBlogById" resultMap="BaseResultMap" statementType="PREPARED" >
         select * from blog where bid = #{bid}
     </select>
 

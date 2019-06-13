@@ -79,7 +79,7 @@ configuration 是整个配置文件的根标签，对应着 MyBatis 里面配置
     * lazyLoadingEnabled(见[关联查询](#关联查询)中一对一查询中的嵌套查询)
     * aggressiveLazyLoading(见[关联查询](#关联查询)中一对一查询中的嵌套查询)
     * proxyFactory(见[关联查询](#关联查询)中一对一查询中的嵌套查询)        
-
+    * localCacheScope(见mybatis-config.xml)
 * typeAliases
 ```
 TypeAlias是给类型起别名
@@ -117,7 +117,13 @@ environments标签用来管理数据库的环境，比如我们可以有开发�
 ```
 ### 映射配置文件标签(见BlogMapper.xml)
 * cache 
+```
+ 开启二级缓存
+```
 * cache-ref 
+```
+ 代表引用别的命名空间的Cache配置，两个命名空间的操作使用的是同一个Cache
+```
 * resultMap 
 ```
  用来描述如何从数据库结果集中来加载对象。
@@ -283,6 +289,51 @@ Mybatis 采用了这个方式，可以在Mapper接口的方法上加上这个参
  所以在项目中，基本都会使用分页插件，例如PageHelper等
  PageHelper的使用示例见:MyBatisTest下testSelectByPageHelp
 ``` 
+### 缓存
+* 一级缓存(也叫本地缓存,默认开启不需配置)
+```
+ 一级缓存示例都在测试下mybatis.cacheTest.FirstLevelCacheTest类
+
+ SimpleExecutor/ReuseExecutor/BatchExecutor 的父类BaseExecutor的
+ 构造函数中持有了PerpetualCache,
+ PerpetualCache中的Map<Object, Object> cache属性就是一级缓存
+ cache属性根据statementId,params,rowBounds来构建一个key值，value存放返回结果
+ 
+ MyBatis的一级缓存是只能在一个会话里面共享(示例见testCache方法)
+ 当在该次会话中执行了更新操作就会清除原有缓存重新发起请求(示例见testCacheInvalid方法)
+ 
+ 一级缓存的问题：(示例见testCacheDirty方法)
+ 现在两个会话，会话1和会话2，会话1执行查询，将结果保存在PerpetualCache，
+ 会话二更新数据后，会话1又执行了查询，这个时候会话1的缓存未被清除，
+ 最后拿到的数据是更新前的数据，造成的脏读的现象
+ 
+ 关闭一级缓存：见mybatis-config.xml中setting name="localCacheScope"的说明
+``` 
+* 二级缓存
+```
+ 二级缓存示例都在测试下mybatis.cacheTest.SecondLevelCacheTest类
+
+ 二级缓存用来解决一级缓存不能跨会话共享的问题的，范围是 namespace 级别的，
+ 可以被多个SqlSession共享（只要是同一个接口里面的相同方法，都可以共享），生命周期和应用同步。
+ 二级缓存工作在一级缓存之前，只有取不到二级缓存的情况下才到一个会话中去取一级缓存。
+
+ 二级缓存原理：
+ 如果启用了二级缓存，MyBatis在创建Executor对象的时候会对Executor进行装饰。
+ CachingExecutor对于查询请求，会判断二级缓存是否有缓存结果(根据MappedStatement的cache属性)，如果有就直接返回
+ 如果没有委派交给真正的查询器Executor实现类，比如SimpleExecutor来执行查询，再走到一级缓存的流程。
+ 最后会把结果缓存起来，并且返回给用户。
+ 
+ 开启二级缓存的方法
+ 1.在mybatis-config.xml中配置(见mybatis-config.xml)
+ 2.在Mapper.xml中配置<cache/>标签(见BlogMapper.xml)
+ 
+ 开启二级缓存后，如果某些查询方法对数据的实时性要求很高，不需要二级缓存
+ 则可以在select标签上加上useCache="false" 
+ 
+ 注意：如果事物不提交，二级缓存不会写入（查不到）
+``` 
+
+
 ### 通用 Mapper
 ```
  1.出现原因：

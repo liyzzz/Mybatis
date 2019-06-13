@@ -12,7 +12,11 @@
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="STDOUT_LOGGING" />
 
-        <!-- 控制全局缓存（二级缓存）-->
+        <!--
+            控制全局缓存（二级缓存）
+            value="false" 关闭二级缓存
+            value="true" 默认值 开启二级缓存
+        -->
         <setting name="cacheEnabled" value="true"/>
 
         <!-- 延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。默认 false  -->
@@ -21,10 +25,13 @@
         <setting name="aggressiveLazyLoading" value="false"/>
         <!--  Mybatis 创建具有延迟加载能力的对象所用到的代理工具，默认JAVASSIST -->
         <!--<setting name="proxyFactory" value="CGLIB" />-->
-        <!-- STATEMENT级别的缓存，使一级缓存，只针对当前执行的这一statement有效 -->
         <!--
-                <setting name="localCacheScope" value="STATEMENT"/>
-        -->
+            value="SESSION"
+            会话级别的一级缓存，也是默认值
+            value="STATEMENT"
+            关闭一级缓存,每次执行完一个STATEMENT后都会将一级缓存清除。
+            只是需要对某一条select语句禁用一级缓存，则可以在对应的select元素上加上flushCache="true" 默认select语句为false
+         -->
         <setting name="localCacheScope" value="SESSION"/>
     </settings>
 
