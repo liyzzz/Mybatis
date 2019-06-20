@@ -11,6 +11,7 @@
   <modules>
     <module>MybatisAlone</module>
       <module>mybatisGenerator</module>
+      <module>Spring-Mybatis</module>
   </modules>
 
   <name>Mybatis</name>

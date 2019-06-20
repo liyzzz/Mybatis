@@ -55,7 +55,7 @@
     <plugins>
         <!-- 分页pageHelp插件-->
         <!--配置说明见https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md-->
-        <plugin interceptor="com.github.pagehelper.PageHelper">
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">
             <property name="dialect" value="mysql"/>
             <property name="offsetAsPageNum" value="false"/>
             <property name="rowBoundsWithCount" value="false"/>
@@ -63,6 +63,11 @@
             <property name="reasonable" value="false"/>
             <property name="supportMethodsArguments" value="false"/>
             <property name="returnPageInfo" value="none"/>
+        </plugin>-->
+        <plugin interceptor="com.liyueze.mybatis.intercepter.MyPagehHelp">
+            <property name="pageSize" value="5"/>
+        </plugin>
+        <plugin interceptor="com.liyueze.mybatis.intercepter.MyLog">
         </plugin>
     </plugins>
 

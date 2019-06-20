@@ -1,7 +1,6 @@
 package com.liyueze.mybatis;
 
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.liyueze.mybatis.entry.Blog;
@@ -68,7 +67,6 @@ public class MyBatisTest {
         String resource = "mybatis-config.xml";
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-
         SqlSession session = sqlSessionFactory.openSession();
         try {
             BlogMapper mapper = session.getMapper(BlogMapper.class);
@@ -238,6 +236,32 @@ public class MyBatisTest {
             System.out.println(page.getPageNum());
             //获取最后一页页码
             System.out.println(page.getLastPage());
+        } finally {
+            session.close();
+        }
+    }
+
+
+    /**
+     * 测试自己写的分页插件和log插件
+     * @throws IOException
+     */
+    @Test
+    public void testSelectByMyRowBounds() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            BlogMapper mapper = session.getMapper(BlogMapper.class);
+            int start = 0; // offset
+            int pageSize = -1; // 这里的limit可以随意设置，会被配置里的pageSize覆盖
+            RowBounds rb = new RowBounds(start, pageSize);
+            List<Blog> list = mapper.selectBlogList(rb); // 使用逻辑分页
+            for(Blog b :list){
+                System.out.println(b);
+            }
         } finally {
             session.close();
         }
