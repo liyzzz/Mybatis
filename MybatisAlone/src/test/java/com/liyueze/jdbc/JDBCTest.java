@@ -76,7 +76,7 @@ public class JDBCTest
             Class.forName("com.mysql.jdbc.Driver");
 
             // 打开连接
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/gp-mybatis?useUnicode=true&characterEncoding=utf-8&rewriteBatchedStatements=true", "root", "123456");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/study?useUnicode=true&characterEncoding=utf-8&rewriteBatchedStatements=true", "root", "123456");
             ps = conn.prepareStatement(
                     "INSERT into blog values (?, ?, ?)");
 
